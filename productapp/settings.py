@@ -94,6 +94,7 @@ DATABASES = {
         'NAME': 'Rohit_rec',
         'USER': 'root',
         'PASSWORD': 'Rohit@123',
+        'HOST': 'localhost',
         'PORT': '3306'
     }
 }
