@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, HttpResponse
 from.models import Product
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 # Create your views here.
 
 @login_required(login_url='login')
@@ -12,19 +12,26 @@ def Welcome(request):
 
 
 def Add_product(request):
+  
     if request.method == "GET":
         return render(request,"create_product.html")
     elif request.method == "POST":
         data = request.POST
         if not data.get("id"):
-            Product.objects.create(Name = data.get("name"), MF_date = data.get("mf_date"),
-                                product_no = data.get("product number"))
+            try:
+                Product.objects.create(Name = data.get("name"), MF_date = data.get("mf_date"),
+                                    product_no = data.get("product number"))
+            except Exception as msg:
+                messages.error(request, f"Error: {msg}")
         else:
             product = Product.objects.get(id = data.get("id"))
             product.Name = data.get("name")
             product.MF_date = data.get("mf_date")
             product.product_no = data.get("product number")
-            product.save()
+            try:
+                product.save()
+            except Exception as msg:
+                messages.error(request, f"Error: {msg}")
         return redirect("home")
 
 
